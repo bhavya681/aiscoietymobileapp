@@ -46,6 +46,11 @@ export default function LoginScreen() {
 
     try {
       await signIn(values.email, values.password);
+
+      // Navigate explicitly once the session is confirmed instead of relying
+      // only on the protected-route guard, which can leave the auth screen
+      // visible on some web/native navigator states.
+      router.replace("/(tabs)");
     } catch (error) {
       setFormError(errorMessage(error));
     }

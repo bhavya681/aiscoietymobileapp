@@ -61,6 +61,8 @@ export default function SignupScreen() {
         address: values.address,
         password: values.password,
       });
+
+      router.replace("/(tabs)");
     } catch (error) {
       setFormError(errorMessage(error));
     }

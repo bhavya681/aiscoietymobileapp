@@ -72,6 +72,7 @@ export default function ProfileScreen() {
 
     try {
       await signOut();
+      router.replace("/(auth)/login");
     } finally {
       setSigningOut(false);
     }
@@ -92,6 +93,7 @@ export default function ProfileScreen() {
 
               try {
                 await deleteAccount();
+                router.replace("/(auth)/login");
               } catch (error) {
                 Alert.alert("Could not delete account", errorMessage(error));
               } finally {

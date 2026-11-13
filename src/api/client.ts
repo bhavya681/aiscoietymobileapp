@@ -32,7 +32,14 @@ export function setUnauthorizedHandler(handler: (() => void) | null) {
 export const api = create({
   baseURL: API_BASE_URL,
   timeout: REQUEST_TIMEOUT_MS,
-  withCredentials: true,
+  /**
+   * Auth travels in the `Authorization: Bearer` header on every platform.
+   * The API intentionally allows any origin, and browsers reject wildcard
+   * CORS responses when credentials mode is "include", so the client must not
+   * opt into cookie credentials. Native builds cannot use browser cookies
+   * anyway; they persist the token in SecureStore instead.
+   */
+  withCredentials: false,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -47,11 +54,10 @@ api.interceptors.request.use((config) => {
     config.headers.set("Authorization", `Bearer ${authToken}`);
 
     /**
-     * The deployed web backend authenticates from the `token` httpOnly cookie.
-     * React Native can attach that cookie manually once the token is known
-     * (something a browser would forbid), so sending both headers keeps the
-     * app compatible with the current deployment *and* with the documented
-     * Bearer-token patch.
+     * Transitional compatibility: a browser would forbid setting `Cookie`
+     * manually, but React Native can. This lets older deployments that only
+     * read the `token` cookie keep working until the Bearer-capable build is
+     * live. The header is never sent on web.
      */
     if (Platform.OS !== "web") {
       config.headers.set("Cookie", `token=${authToken}`);
