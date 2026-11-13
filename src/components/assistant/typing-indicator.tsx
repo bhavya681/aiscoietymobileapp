@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react-native";
+import { MessageSquareText } from "lucide-react-native";
 import { useEffect } from "react";
 import { View } from "react-native";
 import Animated, {
@@ -28,7 +28,7 @@ export function TypingIndicator() {
           justifyContent: "center",
         }}
       >
-        <Sparkles size={14} color={colors.primary} strokeWidth={2} />
+        <MessageSquareText size={14} color={colors.primary} strokeWidth={1.9} />
       </View>
       <View
         style={{

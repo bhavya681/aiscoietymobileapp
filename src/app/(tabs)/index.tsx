@@ -1,9 +1,7 @@
 import { useRouter } from "expo-router";
 import {
-  ArrowRight,
   History,
-  ReceiptText,
-  Sparkles,
+  MessageSquareText,
   UserRound,
   Wallet,
 } from "lucide-react-native";
@@ -17,10 +15,10 @@ import { ErrorState } from "@/components/common/error-state";
 import { ScrollScreen } from "@/components/common/screen";
 import { SectionHeader } from "@/components/common/section-header";
 import { Skeleton } from "@/components/common/skeleton";
+import { AccountSummary } from "@/components/dashboard/account-summary";
 import { AdminBanner } from "@/components/dashboard/admin-banner";
 import { AiEntryCard } from "@/components/dashboard/ai-entry-card";
 import { BalanceCard } from "@/components/dashboard/balance-card";
-import { MetricTile } from "@/components/dashboard/metric-tile";
 import { QuickActions, type QuickAction } from "@/components/dashboard/quick-actions";
 import { SocietyCard } from "@/components/dashboard/society-card";
 import { TransactionRow } from "@/components/dashboard/transaction-row";
@@ -33,7 +31,6 @@ import { useAppTheme } from "@/hooks/use-app-theme";
 import { useAuthStore } from "@/store/auth-store";
 import type { MaintenanceRecord } from "@/types/api";
 import { errorMessage } from "@/utils/errors";
-import { formatCurrency, pluralize } from "@/utils/format";
 
 function greeting(): string {
   const hour = new Date().getHours();
@@ -51,6 +48,14 @@ function greeting(): string {
 
 function firstName(name?: string): string {
   return name?.trim().split(/\s+/)[0] ?? "resident";
+}
+
+function todayLabel(): string {
+  return new Date().toLocaleDateString(undefined, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
 }
 
 export default function HomeScreen() {
@@ -123,8 +128,8 @@ export default function HomeScreen() {
     },
     {
       key: "assistant",
-      label: "Ask the assistant",
-      icon: Sparkles,
+      label: "Ask assistant",
+      icon: MessageSquareText,
       tone: "inverse",
       onPress: () => router.push("/(tabs)/assistant"),
     },
@@ -144,7 +149,7 @@ export default function HomeScreen() {
   return (
     <ScrollScreen refreshing={refreshing} onRefresh={onRefresh}>
       <View style={styles.topRow}>
-        <BrandLockup subtitle={SOCIETY.name} />
+        <BrandLockup subtitle={SOCIETY.shortName} />
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Open profile"
@@ -162,15 +167,29 @@ export default function HomeScreen() {
         </Pressable>
       </View>
 
-      <View style={{ marginTop: spacing.lg, marginBottom: spacing.lg, gap: 3 }}>
-        <AppText variant="caption" color={colors.mutedForeground}>
-          {greeting()},
+      <View style={{ marginTop: spacing.xl, marginBottom: spacing.lg, gap: 2 }}>
+        <AppText
+          variant="micro"
+          color={colors.mutedForeground}
+          style={{ letterSpacing: 0.6, textTransform: "uppercase" }}
+        >
+          {todayLabel()}
         </AppText>
-        <AppText variant="title" numberOfLines={1}>
-          {firstName(user?.name)}
+        <AppText
+          style={{
+            fontSize: 27,
+            lineHeight: 33,
+            fontWeight: "700",
+            letterSpacing: -0.8,
+            color: colors.foreground,
+            marginTop: 4,
+          }}
+          numberOfLines={1}
+        >
+          {greeting()}, {firstName(user?.name)}
         </AppText>
         <AppText variant="bodySmall" color={colors.mutedForeground}>
-          Here is your society snapshot for today.
+          Here is your account at a glance.
         </AppText>
       </View>
 
@@ -236,45 +255,25 @@ export default function HomeScreen() {
             />
           ) : null}
 
-          <View style={{ flexDirection: "row", gap: 10, marginTop: spacing.md }}>
-            <MetricTile
-              icon={ReceiptText}
-              label="Monthly"
-              value={monthlyAmount ? formatCurrency(monthlyAmount) : "—"}
-              hint={monthlyAmount ? "Standard tariff" : "Not raised yet"}
-              tone="primary"
-            />
-            <MetricTile
-              icon={History}
-              label="Open bills"
-              value={String(openBills)}
-              hint={
-                overdueCount > 0
-                  ? `${overdueCount} overdue`
-                  : openBills === 0
-                    ? "All clear"
-                    : "Upcoming"
-              }
-              tone={overdueCount > 0 ? "danger" : openBills > 0 ? "warning" : "success"}
-            />
-            <MetricTile
-              icon={Wallet}
-              label="Paid to date"
-              value={formatCurrency(totalPaid)}
-              hint={pluralize(paidRecords.length, "receipt")}
-              tone="success"
+          <View style={{ marginTop: spacing.md }}>
+            <AccountSummary
+              monthlyAmount={monthlyAmount}
+              openBills={openBills}
+              overdueCount={overdueCount}
+              totalPaid={totalPaid}
+              paidCount={paidRecords.length}
             />
           </View>
 
           <SectionHeader title="Quick actions" />
           <QuickActions actions={actions} />
 
-          <View style={{ marginTop: spacing.md }}>
+          <View style={{ marginTop: spacing.xl }}>
             <AiEntryCard
               onPress={() => router.push("/(tabs)/assistant")}
               suggestion={
                 isOverdue
-                  ? "Your account has an overdue balance. Ask me what to do next."
+                  ? "Your account has an overdue balance. Ask what to do next."
                   : "Ask about dues, invoices, receipts or society rules."
               }
             />
@@ -319,11 +318,23 @@ export default function HomeScreen() {
           <SectionHeader title="Society information" />
           <SocietyCard />
 
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, marginTop: spacing.xxl }}>
-            <AppText variant="micro" color={colors.mutedForeground}>
-              SocietyAI · {SOCIETY.name}
+          <View
+            style={{
+              alignItems: "center",
+              gap: 3,
+              marginTop: spacing.xxxl,
+            }}
+          >
+            <AppText
+              variant="micro"
+              color={colors.mutedForeground}
+              style={{ letterSpacing: 0.5, textTransform: "uppercase" }}
+            >
+              {SOCIETY.name}
             </AppText>
-            <ArrowRight size={10} color={colors.mutedForeground} />
+            <AppText variant="micro" color={colors.mutedForeground}>
+              Resident portal
+            </AppText>
           </View>
         </>
       )}
@@ -336,15 +347,15 @@ function HomeSkeleton() {
 
   return (
     <View style={{ gap: spacing.md }}>
-      <Skeleton height={178} radius={radius.xl} />
-      <View style={{ flexDirection: "row", gap: 10 }}>
-        <Skeleton height={112} radius={radius.md} style={{ flex: 1 }} />
-        <Skeleton height={112} radius={radius.md} style={{ flex: 1 }} />
-        <Skeleton height={112} radius={radius.md} style={{ flex: 1 }} />
+      <Skeleton height={196} radius={radius.xl} />
+      <Skeleton height={88} radius={radius.lg} />
+      <View style={{ flexDirection: "row", gap: 10, marginTop: 8 }}>
+        <Skeleton height={72} radius={12} style={{ flex: 1 }} />
+        <Skeleton height={72} radius={12} style={{ flex: 1 }} />
+        <Skeleton height={72} radius={12} style={{ flex: 1 }} />
+        <Skeleton height={72} radius={12} style={{ flex: 1 }} />
       </View>
-      <Skeleton height={80} radius={radius.md} />
-      <Skeleton height={80} radius={radius.md} />
-      <Skeleton height={70} radius={radius.lg} />
+      <Skeleton height={74} radius={radius.lg} />
       <View
         style={{
           backgroundColor: colors.card,

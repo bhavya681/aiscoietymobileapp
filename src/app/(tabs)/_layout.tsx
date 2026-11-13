@@ -2,14 +2,42 @@ import { Tabs } from "expo-router";
 import {
   History,
   Home,
+  MessageSquareText,
   ReceiptText,
-  Sparkles,
   UserRound,
+  type LucideIcon,
 } from "lucide-react-native";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
+
+function TabIcon({
+  icon: Icon,
+  color,
+  focused,
+}: {
+  icon: LucideIcon;
+  color: string;
+  focused: boolean;
+}) {
+  const { colors, radius } = useAppTheme();
+
+  return (
+    <View
+      style={{
+        width: 46,
+        height: 27,
+        borderRadius: radius.sm,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: focused ? colors.primarySoft : "transparent",
+      }}
+    >
+      <Icon size={19} color={color} strokeWidth={focused ? 2.3 : 1.9} />
+    </View>
+  );
+}
 
 export default function TabsLayout() {
   const { colors } = useAppTheme();
@@ -24,9 +52,9 @@ export default function TabsLayout() {
         tabBarInactiveTintColor: colors.mutedForeground,
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          height: 58 + bottomPadding,
+          height: 62 + bottomPadding,
           paddingBottom: bottomPadding,
-          paddingTop: 6,
+          paddingTop: 7,
           backgroundColor: colors.card,
           borderTopColor: colors.border,
           borderTopWidth: StyleSheet.hairlineWidth,
@@ -34,9 +62,10 @@ export default function TabsLayout() {
           shadowOpacity: 0,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 10.5,
           fontWeight: "600",
           letterSpacing: 0.1,
+          marginTop: 3,
         },
         tabBarItemStyle: {
           paddingVertical: 2,
@@ -48,7 +77,7 @@ export default function TabsLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <Home size={21} color={color} strokeWidth={focused ? 2.4 : 1.9} />
+            <TabIcon icon={Home} color={color} focused={focused} />
           ),
         }}
       />
@@ -57,11 +86,7 @@ export default function TabsLayout() {
         options={{
           title: "Maintenance",
           tabBarIcon: ({ color, focused }) => (
-            <ReceiptText
-              size={21}
-              color={color}
-              strokeWidth={focused ? 2.4 : 1.9}
-            />
+            <TabIcon icon={ReceiptText} color={color} focused={focused} />
           ),
         }}
       />
@@ -70,11 +95,7 @@ export default function TabsLayout() {
         options={{
           title: "Payments",
           tabBarIcon: ({ color, focused }) => (
-            <History
-              size={21}
-              color={color}
-              strokeWidth={focused ? 2.4 : 1.9}
-            />
+            <TabIcon icon={History} color={color} focused={focused} />
           ),
         }}
       />
@@ -83,11 +104,7 @@ export default function TabsLayout() {
         options={{
           title: "Assistant",
           tabBarIcon: ({ color, focused }) => (
-            <Sparkles
-              size={21}
-              color={color}
-              strokeWidth={focused ? 2.4 : 1.9}
-            />
+            <TabIcon icon={MessageSquareText} color={color} focused={focused} />
           ),
         }}
       />
@@ -96,11 +113,7 @@ export default function TabsLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color, focused }) => (
-            <UserRound
-              size={21}
-              color={color}
-              strokeWidth={focused ? 2.4 : 1.9}
-            />
+            <TabIcon icon={UserRound} color={color} focused={focused} />
           ),
         }}
       />

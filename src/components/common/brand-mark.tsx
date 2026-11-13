@@ -1,28 +1,56 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { Building2 } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
+import Svg, { Path } from "react-native-svg";
 
 import { AppText } from "@/components/common/app-text";
 import { useAppTheme } from "@/hooks/use-app-theme";
 
+/**
+ * The brand mark is a simple architectural arch — a deliberate, civic glyph for
+ * a housing society rather than the generic "sparkle" used by AI products.
+ */
 export function BrandMark({ size = 44 }: { size?: number }) {
-  const { radius } = useAppTheme();
+  const { colors, radius } = useAppTheme();
 
   return (
-    <LinearGradient
-      colors={["#2a7f61", "#1f6b52", "#154c3b"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+    <View
       style={{
         width: size,
         height: size,
-        borderRadius: Math.min(radius.md, size * 0.3),
+        borderRadius: Math.min(radius.md, size * 0.28),
+        backgroundColor: colors.primary,
         alignItems: "center",
         justifyContent: "center",
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: colors.primary + "55",
       }}
     >
-      <Building2 size={size * 0.46} color="#eaf7f0" strokeWidth={2} />
-    </LinearGradient>
+      <Svg width={size * 0.58} height={size * 0.58} viewBox="0 0 48 48">
+        <Path
+          d="M12 22.5 24 12l12 10.5"
+          stroke={colors.primaryForeground}
+          strokeWidth={2.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <Path
+          d="M16 20.5V36h16V20.5"
+          stroke={colors.primaryForeground}
+          strokeWidth={2.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <Path
+          d="M21.5 36v-8h5v8"
+          stroke={colors.primaryForeground}
+          strokeWidth={2.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </Svg>
+    </View>
   );
 }
 
@@ -39,11 +67,19 @@ export function BrandLockup({
     <View style={styles.row}>
       <BrandMark size={size} />
       <View style={{ gap: 1 }}>
-        <AppText variant="label" weight="700" style={{ letterSpacing: -0.2 }}>
+        <AppText
+          variant="label"
+          weight="700"
+          style={{ letterSpacing: -0.3, fontSize: 13 }}
+        >
           SocietyAI
         </AppText>
         {subtitle ? (
-          <AppText variant="micro" color={colors.mutedForeground}>
+          <AppText
+            variant="micro"
+            color={colors.mutedForeground}
+            style={{ letterSpacing: 0.4, textTransform: "uppercase" }}
+          >
             {subtitle}
           </AppText>
         ) : null}

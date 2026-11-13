@@ -1,8 +1,7 @@
-import { LinearGradient } from "expo-linear-gradient";
 import {
   BookOpen,
   CheckCircle2,
-  Sparkles,
+  MessageSquareText,
   Trash2,
   TrendingUp,
 } from "lucide-react-native";
@@ -112,12 +111,12 @@ export default function AssistantScreen() {
               justifyContent: "center",
             }}
           >
-            <Sparkles size={19} color={colors.primary} strokeWidth={2} />
+            <MessageSquareText size={19} color={colors.primary} strokeWidth={1.9} />
           </View>
 
           <View style={{ flex: 1, gap: 1 }}>
-            <AppText variant="heading" style={{ fontSize: 17 }}>
-              SocietyAI assistant
+            <AppText weight="600" style={{ fontSize: 17, letterSpacing: -0.3 }}>
+              Assistant
             </AppText>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
               <View
@@ -129,7 +128,7 @@ export default function AssistantScreen() {
                 }}
               />
               <AppText variant="micro" color={colors.mutedForeground}>
-                Grounded in your society records
+                Answers from your society records
               </AppText>
             </View>
           </View>
@@ -175,53 +174,75 @@ export default function AssistantScreen() {
 
           {!hasConversation ? (
             <View style={{ gap: spacing.lg }}>
-              <LinearGradient
-                colors={["#10221a", "#184030", "#21523c"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
+              <View
                 style={{
+                  backgroundColor: colors.card,
+                  borderWidth: StyleSheet.hairlineWidth,
+                  borderColor: colors.border,
                   borderRadius: radius.xl,
                   padding: spacing.xl,
-                  gap: spacing.sm,
-                  overflow: "hidden",
+                  gap: spacing.md,
                 }}
               >
-                <View
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 14,
-                    backgroundColor: "#ffffff14",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: spacing.xs,
-                  }}
-                >
-                  <Sparkles size={22} color="#9fdec2" strokeWidth={2} />
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                  <View
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: radius.md,
+                      backgroundColor: colors.primarySoft,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <MessageSquareText
+                      size={21}
+                      color={colors.primary}
+                      strokeWidth={1.9}
+                    />
+                  </View>
+                  <View style={{ flex: 1, gap: 2 }}>
+                    <AppText
+                      variant="micro"
+                      color={colors.mutedForeground}
+                      style={{ letterSpacing: 0.7, textTransform: "uppercase" }}
+                    >
+                      Society help
+                    </AppText>
+                    <AppText
+                      style={{
+                        fontSize: 21,
+                        lineHeight: 27,
+                        fontWeight: "700",
+                        letterSpacing: -0.6,
+                        color: colors.foreground,
+                      }}
+                    >
+                      Ask about your account
+                    </AppText>
+                  </View>
                 </View>
-                <AppText
-                  style={{
-                    fontSize: 23,
-                    lineHeight: 29,
-                    fontWeight: "700",
-                    letterSpacing: -0.6,
-                    color: "#f4faf6",
-                  }}
-                >
-                  Your society, answered.
-                </AppText>
+
                 <AppText
                   variant="bodySmall"
-                  style={{ color: "#b3d2c1", lineHeight: 20 }}
+                  color={colors.mutedForeground}
+                  style={{ lineHeight: 20 }}
                 >
-                  Ask about pending dues, invoices, receipts or society policies.
-                  Answers use your real records — never guesses.
+                  Get clear answers about pending dues, invoices, receipts and
+                  society policies. Every answer is grounded in your records.
                 </AppText>
 
-                <View style={{ gap: 8, marginTop: spacing.sm }}>
+                <View
+                  style={{
+                    height: StyleSheet.hairlineWidth,
+                    backgroundColor: colors.border,
+                  }}
+                />
+
+                <View style={{ gap: 10 }}>
                   <Capability
                     icon={TrendingUp}
-                    text="Live pending balance and due dates"
+                    text="Live balance and upcoming due dates"
                   />
                   <Capability
                     icon={CheckCircle2}
@@ -229,10 +250,10 @@ export default function AssistantScreen() {
                   />
                   <Capability
                     icon={BookOpen}
-                    text="Society policy, timings and late fees"
+                    text="Society policies, timings and late fees"
                   />
                 </View>
-              </LinearGradient>
+              </View>
 
               <View style={{ gap: spacing.sm }}>
                 <AppText variant="label" color={colors.mutedForeground}>
@@ -293,10 +314,27 @@ function Capability({
   icon: typeof TrendingUp;
   text: string;
 }) {
+  const { colors, radius } = useAppTheme();
+
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Icon size={14} color="#8fd0b4" strokeWidth={2} />
-      <AppText variant="caption" style={{ color: "#c7e3d4" }}>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <View
+        style={{
+          width: 26,
+          height: 26,
+          borderRadius: radius.pill,
+          backgroundColor: colors.successSoft,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Icon size={13} color={colors.success} strokeWidth={2.1} />
+      </View>
+      <AppText
+        variant="caption"
+        color={colors.mutedForeground}
+        style={{ flex: 1 }}
+      >
         {text}
       </AppText>
     </View>

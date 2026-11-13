@@ -13,10 +13,10 @@ export type QuickAction = {
 };
 
 export function QuickActions({ actions }: { actions: QuickAction[] }) {
-  const { colors, radius, spacing } = useAppTheme();
+  const { colors, radius } = useAppTheme();
 
   return (
-    <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+    <View style={styles.row}>
       {actions.map((action) => {
         const palette = getTone(action.tone ?? "primary", colors);
 
@@ -28,32 +28,32 @@ export function QuickActions({ actions }: { actions: QuickAction[] }) {
             onPress={action.onPress}
             style={({ pressed }) => [
               styles.item,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.border,
-                borderRadius: radius.md,
-                padding: spacing.md,
-                opacity: pressed ? 0.7 : 1,
-              },
+              { opacity: pressed ? 0.55 : 1 },
             ]}
           >
             <View
               style={{
-                width: 32,
-                height: 32,
-                borderRadius: radius.sm,
+                width: 46,
+                height: 46,
+                borderRadius: radius.md,
                 backgroundColor: palette.background,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
               <action.icon
-                size={16}
+                size={19}
                 color={palette.foreground}
-                strokeWidth={2}
+                strokeWidth={1.9}
               />
             </View>
-            <AppText variant="caption" weight="500" numberOfLines={2}>
+            <AppText
+              variant="caption"
+              weight="500"
+              align="center"
+              numberOfLines={2}
+              style={{ lineHeight: 15 }}
+            >
               {action.label}
             </AppText>
           </Pressable>
@@ -73,7 +73,7 @@ function getTone(
     case "success":
       return { background: colors.successSoft, foreground: colors.success };
     case "inverse":
-      return { background: colors.inverse, foreground: colors.inverseForeground };
+      return { background: colors.muted, foreground: colors.foreground };
     case "primary":
     default:
       return { background: colors.primarySoft, foreground: colors.primary };
@@ -81,12 +81,14 @@ function getTone(
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+    gap: 6,
+  },
   item: {
-    flexBasis: "47%",
-    flexGrow: 1,
-    borderWidth: StyleSheet.hairlineWidth,
-    gap: 8,
-    minHeight: 78,
-    justifyContent: "space-between",
+    flex: 1,
+    alignItems: "center",
+    gap: 7,
+    paddingVertical: 4,
   },
 });

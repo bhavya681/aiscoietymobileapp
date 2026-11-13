@@ -3,7 +3,7 @@ import * as Haptics from "expo-haptics";
 import {
   CheckCircle2,
   Copy,
-  Sparkles,
+  MessageSquareText,
   Wrench,
   XCircle,
   type LucideIcon,
@@ -86,7 +86,7 @@ export function MessageBubble({
           marginTop: 2,
         }}
       >
-        <Sparkles size={14} color={colors.primary} strokeWidth={2} />
+        <MessageSquareText size={14} color={colors.primary} strokeWidth={1.9} />
       </View>
 
       <View style={{ flex: 1, gap: 8 }}>

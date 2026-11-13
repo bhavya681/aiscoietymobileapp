@@ -24,11 +24,16 @@ export function SectionHeader({
     <View
       style={[
         styles.container,
-        { marginBottom: spacing.md, marginTop: spacing.lg },
+        { marginBottom: spacing.sm + 2, marginTop: spacing.xxl },
       ]}
     >
-      <View style={{ flex: 1, gap: 2 }}>
-        <AppText variant="heading">{title}</AppText>
+      <View style={{ flex: 1, gap: 1 }}>
+        <AppText
+          weight="600"
+          style={{ fontSize: 16, lineHeight: 21, letterSpacing: -0.25 }}
+        >
+          {title}
+        </AppText>
         {caption ? (
           <AppText variant="caption" color={colors.mutedForeground}>
             {caption}
@@ -42,9 +47,9 @@ export function SectionHeader({
           accessibilityLabel={actionLabel}
           onPress={onAction}
           hitSlop={8}
-          style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+          style={({ pressed }) => ({ opacity: pressed ? 0.55 : 1 })}
         >
-          <AppText variant="label" weight="600" color={colors.primary}>
+          <AppText variant="caption" weight="600" color={colors.primary}>
             {actionLabel}
           </AppText>
         </Pressable>
